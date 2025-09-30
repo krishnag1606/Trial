@@ -1,5 +1,5 @@
 import { Dimensions } from 'react-native';
-import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
+import { moderateScale, scale } from 'react-native-size-matters';
 
 const { width, height } = Dimensions.get('window');
 
@@ -8,7 +8,7 @@ export const theme = {
     primary: '#4A90E2',
     primaryDark: '#357ABD',
     secondary: '#50C878',
-    background: '#F5F7FA',
+    background: '#d2d4d6cc',
     surface: '#FFFFFF',
     text: '#2C3E50',
     textSecondary: '#7F8C8D',
@@ -31,7 +31,9 @@ export const theme = {
     md: scale(16),
     lg: scale(24),
     xl: scale(32),
-    xxl: scale(48)
+    xxl: scale(48),
+    xxxl: scale(64),
+    xxxxl: scale(80)
   },
   borderRadius: {
     sm: moderateScale(4),
