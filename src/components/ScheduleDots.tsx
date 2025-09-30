@@ -1,63 +1,53 @@
+// ScheduleDots.tsx
 import React, { useState } from 'react';
-import { View, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { theme } from '../styles/theme';
 
 export function ScheduleDots() {
   const [selectedDays, setSelectedDays] = useState<number[]>([5, 12, 18, 25]);
-  
-  const days = Array.from({ length: 31 }, (_, i) => i + 1);
+
+  const days = Array.from({ length: 28 }, (_, i) => i + 1); // show small grid (28 to fit two rows)
 
   const toggleDay = (day: number) => {
-    setSelectedDays(prev => 
-      prev.includes(day) 
-        ? prev.filter(d => d !== day)
-        : [...prev, day]
+    setSelectedDays(prev =>
+      prev.includes(day) ? prev.filter(d => d !== day) : [...prev, day]
     );
   };
 
   return (
-    <View style={styles.container}>
-      <ScrollView 
-        horizontal 
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
-      >
-        {days.map((day) => (
-          <TouchableOpacity
-            key={day}
-            style={[
-              styles.dot,
-              selectedDays.includes(day) && styles.selectedDot
-            ]}
-            onPress={() => toggleDay(day)}
-          >
-            <View style={[
-              styles.innerDot,
-              selectedDays.includes(day) && styles.selectedInnerDot
-            ]} />
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+    <View style={styles.dotsContainer}>
+      {days.map((day) => (
+        <TouchableOpacity
+          key={day}
+          style={[styles.dot, selectedDays.includes(day) && styles.selectedDot]}
+          onPress={() => toggleDay(day)}
+          activeOpacity={0.8}
+        >
+          <View style={[styles.innerDot, selectedDays.includes(day) && styles.selectedInnerDot]} />
+        </TouchableOpacity>
+      ))}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    marginHorizontal: theme.spacing.md,
-    marginVertical: theme.spacing.sm,
-  },
-  scrollContent: {
+  dotsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
     paddingHorizontal: theme.spacing.sm,
+    paddingVertical: theme.spacing.xs,
   },
   dot: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
     backgroundColor: theme.colors.gray200,
     justifyContent: 'center',
     alignItems: 'center',
-    marginHorizontal: theme.spacing.xs,
+    marginBottom: theme.spacing.xs,
+    // make a flexible grid item that keeps spacing
+    marginHorizontal: 4,
   },
   selectedDot: {
     backgroundColor: theme.colors.primary,
@@ -70,5 +60,8 @@ const styles = StyleSheet.create({
   },
   selectedInnerDot: {
     backgroundColor: theme.colors.surface,
+    width: 10,
+    height: 10,
+    borderRadius: 5,
   },
 });

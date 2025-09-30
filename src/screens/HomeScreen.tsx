@@ -56,7 +56,7 @@ export function HomeScreen() {
         <View style={styles.greetingSection}>
           <View style={styles.greetingRow}>
             <Text style={styles.greeting}>
-              {t('greeting')} {t('howAreYou')}
+              {t('greeting')}{'\n'}{t('howAreYou')}
             </Text>
             <TouchableOpacity style={styles.languageButton} onPress={toggleLanguage}>
               <Text style={styles.languageText}>
@@ -68,16 +68,20 @@ export function HomeScreen() {
 
         <PredictCard onPress={handlePredict} />
         
-        {state.doctors.length > 0 && (
-          <DoctorCard 
-            doctor={state.doctors[0]} 
-            onVideoCall={handleVideoCall}
-          />
-        )}
+        <View style={styles.screen}>
+          {state.doctors.length > 0 && (
+            <DoctorCard
+              doctor={state.doctors[0]}
+              onVideoCall={handleVideoCall}
+            />
+          )}
 
-        <View style={styles.scheduleSection}>
-          <Text style={styles.scheduleTitle}>{t('schedule')}</Text>
-          <ScheduleDots />
+          <View style={styles.scheduleWrapper}>
+            <View style={styles.scheduleSection}>
+              <Text style={styles.scheduleTitle}>{t('schedule')}</Text>
+              <ScheduleDots />
+            </View>
+          </View>
         </View>
 
         <ActionTiles
@@ -141,5 +145,35 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
     marginHorizontal: theme.spacing.md,
     marginBottom: theme.spacing.sm,
+  },
+  screen: {
+    flex: 1,
+    backgroundColor: theme.colors.background,
+    paddingTop: theme.spacing.md,
+  },
+
+  // wrapper places the schedule to overlap card below it
+  scheduleWrapper: {
+    marginHorizontal: theme.spacing.md,
+    marginTop: -56, // negative to pull the schedule up to overlap the card
+    // keep pointer events normal
+  },
+
+  scheduleSection: {
+    backgroundColor: theme.colors.surface, // white
+    borderRadius: 20,
+    paddingTop: theme.spacing.md,
+    paddingBottom: theme.spacing.lg,
+    paddingHorizontal: theme.spacing.md,
+    // Add shadow to match image
+    ...theme.shadows.light,
+    // smaller outline radius on top-left to create "rounded top" effect
+  },
+
+  scheduleTitle: {
+    color: theme.colors.text,
+    fontSize: theme.fontSize.md,
+    fontWeight: '600',
+    marginBottom: theme.spacing.xs,
   },
 });

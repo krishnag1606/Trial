@@ -13,7 +13,7 @@ export function PredictCard({ onPress }: PredictCardProps) {
   return (
     <TouchableOpacity style={styles.card} onPress={onPress}>
       <Image 
-        source={{ uri: 'https://images.pexels.com/photos/4167541/pexels-photo-4167541.jpeg?auto=compress&cs=tinysrgb&w=400&h=300' }}
+        source={{ uri: 'https://disruptionhub.com/wp-content/uploads/2024/01/What-is-the-impact-of-AI-on-the-doctor-patient-relationship-1536x1024.jpg' }}
         style={styles.image}
       />
       <View style={styles.content}>
@@ -37,8 +37,10 @@ const styles = StyleSheet.create({
     ...theme.shadows.medium,
   },
   image: {
+    //align down
+    alignSelf: 'flex-end',
     width: '100%',
-    height: 120,
+    height: 190, 
   },
   content: {
     padding: theme.spacing.md,
