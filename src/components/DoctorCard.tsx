@@ -1,9 +1,10 @@
-// DoctorCard.tsx
-import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+// src/components/DoctorCard.tsx
+import { Feather, Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { theme } from '../styles/theme';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { theme } from '../styles/theme';
 
 interface Doctor {
   id: string;
@@ -21,87 +22,107 @@ export function DoctorCard({ doctor, onVideoCall }: DoctorCardProps) {
   const { t } = useTranslation();
 
   return (
-    <View style={styles.wrapper}>
-      <LinearGradient
-        colors={['#1FA2FF', '#0D68C7']}
-        start={[0, 0]}
-        end={[1, 1]}
-        style={styles.card}
-      >
-        <View style={styles.content}>
-          <View style={styles.textBlock}>
-            <Text style={styles.name}>{doctor.name}</Text>
-            <Text style={styles.specialty}>{doctor.specialty}</Text>
+    <LinearGradient
+      colors={['#1FA2FF', '#0D68C7']}
+      start={[0, 0]}
+      end={[1, 1]}
+      style={styles.card}
+    >
+      <View style={styles.content}>
+        <View style={styles.textBlock}>
+          <Text style={styles.name}>DR. GUPTA</Text>
+          <Text style={styles.specialty}>Family Diagnosis</Text>
 
-            <TouchableOpacity style={styles.videoCallButton} onPress={onVideoCall}>
-              <Text style={styles.videoCallText}>{t('videoCall')}</Text>
-            </TouchableOpacity>
-          </View>
-
-          {/* Doctor image - positioned absolutely to overlap */}
-          <Image
-            source={{ uri: doctor.avatar }}
-            style={styles.avatar}
-          />
+          <TouchableOpacity style={styles.videoCallButton} onPress={onVideoCall}>
+            <Ionicons name="videocam" size={20} color={theme.colors.surface} style={styles.videoIcon} />
+            <Text style={styles.videoCallText}>{t('videoCall')}</Text>
+          </TouchableOpacity>
         </View>
-      </LinearGradient>
-    </View>
+        
+        <Image
+          source={{ uri: doctor.avatar }}
+          style={styles.avatar}
+        />
+        
+        <TouchableOpacity style={styles.bookmarkButton}>
+          <Feather name="bookmark" size={24} color={theme.colors.surface} />
+        </TouchableOpacity>
+      </View>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
-  wrapper: {
-    marginHorizontal: theme.spacing.md,
-    marginBottom: 56, // For the overlapping schedule panel below
-  },
   card: {
-    borderRadius: 20,
-    ...theme.shadows.medium,
-    overflow: 'hidden', // Ensures content doesn't spill out of rounded corners
+    // --- MODIFICATION START ---
+    // Round the top corners to match the parent container
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    // Flatten the bottom corners to connect seamlessly
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+    // --- MODIFICATION END ---
+    height: 180,
+    width: '100%',
   },
   content: {
-    minHeight: 140,
+    minHeight: 160,
     flexDirection: 'row',
-    alignItems: 'center', // Align items vertically in the center
-    paddingVertical: theme.spacing.md, // Add vertical padding to the content
-    position: 'relative', // For absolutely positioning the avatar
+    alignItems: 'center',
+    paddingVertical: theme.spacing.lg, // Added a bit more padding
+    paddingHorizontal: theme.spacing.md,
+    position: 'relative',
   },
   textBlock: {
-    flex: 1, // Take up available space, pushing image to the right
-    paddingLeft: theme.spacing.md, // Left padding for the text content
-    paddingRight: 120, // Reserve space for the overlapping avatar image
+    flex: 1,
+    paddingRight: 140, // Space for the image
     justifyContent: 'center',
   },
   name: {
     color: theme.colors.surface,
-    fontSize: theme.fontSize.xl, // Make name larger
-    fontWeight: '700',
+    fontSize: theme.fontSize.xxxl,
+    fontFamily: 'Helvetica-Bold',
     marginBottom: theme.spacing.xs,
   },
   specialty: {
     color: theme.colors.surface,
-    fontSize: theme.fontSize.md, // Make specialty text a bit larger
+    fontSize: theme.fontSize.md,
+    fontFamily: 'Helvetica',
     opacity: 0.95,
-    marginBottom: theme.spacing.md, // More space below specialty
+    marginBottom: theme.spacing.lg,
   },
   videoCallButton: {
     backgroundColor: '#0E0E0E',
     alignSelf: 'flex-start',
-    paddingHorizontal: theme.spacing.lg, // More padding for a wider button
-    paddingVertical: theme.spacing.sm, // More vertical padding
-    borderRadius: 25, // More rounded for a pill shape
+    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.sm,
+    borderRadius: 25,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  videoIcon: {
+    marginRight: theme.spacing.sm,
   },
   videoCallText: {
     color: theme.colors.surface,
-    fontSize: theme.fontSize.md, // Larger text for button
-    fontWeight: '600',
+    fontSize: theme.fontSize.lg,
+    fontWeight: 'bold',
+    fontFamily: 'Helvetica-Bold',
   },
   avatar: {
     position: 'absolute',
-    right: -20, // Nudge right to overlap more
-    top: 0,   // Nudge up to overlap the top edge
-    width: 200, // Fixed width for the image
-    height: '140%', // Make it taller than the card to overlap more
-    resizeMode: 'cover', // Cover mode to fill the space
+    right: -38,
+    bottom: 0,
+    width: 190,
+    height: '130%',
+    top: 0,
+    resizeMode: 'contain',
+    borderRadius: 50,
+  },
+  bookmarkButton: {
+    position: 'absolute',
+    top: theme.spacing.md,
+    right: theme.spacing.md,
+    padding: theme.spacing.xs,
   },
 });

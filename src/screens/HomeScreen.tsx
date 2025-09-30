@@ -1,8 +1,9 @@
-// HomeScreen.tsx
+// src/screens/HomeScreen.tsx
+import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ActionTiles } from '../components/ActionTiles';
 import { BottomActions } from '../components/BottomActions';
@@ -13,20 +14,20 @@ import { PredictorsAccordion } from '../components/PredictorsAccordion';
 import { ScheduleDots } from '../components/ScheduleDots';
 import { useAppContext } from '../contexts/AppContext';
 import { theme } from '../styles/theme';
-import i18n from '../utils/i18n';
 
 export function HomeScreen() {
   const navigation = useNavigation();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { state, dispatch } = useAppContext();
+  
+  const [isLanguageModalVisible, setLanguageModalVisible] = useState(false);
 
-  const toggleLanguage = () => {
-    const newLanguage = i18n.language === 'en' ? 'hi' : 'en';
-    i18n.changeLanguage(newLanguage);
-    dispatch({ type: 'SET_LANGUAGE', payload: newLanguage });
+  const handleLanguageSelect = (language: 'en' | 'hi') => {
+    i18n.changeLanguage(language);
+    dispatch({ type: 'SET_LANGUAGE', payload: language });
+    setLanguageModalVisible(false);
   };
 
-  // ... (rest of your handler functions remain the same)
   const handleVideoCall = () => {
     navigation.navigate('VideoCall', { doctor: state.doctors[0] });
   };
@@ -53,38 +54,33 @@ export function HomeScreen() {
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         <View style={styles.greetingSection}>
           <View style={styles.greetingRow}>
-            {/* --- MODIFICATION START --- */}
             <Text style={styles.greeting}>
-              {/* Nested Text component to apply a different color */}
               <Text style={styles.greetingHighlight}>{t('greeting')}{t(',')}</Text>
               {'\n'}
               {t('howAreYou')}
             </Text>
-            {/* --- MODIFICATION END --- */}
-            <TouchableOpacity style={styles.languageButton} onPress={toggleLanguage}>
+            
+            <TouchableOpacity style={styles.languageButton} onPress={() => setLanguageModalVisible(true)}>
               <Text style={styles.languageText}>
-                {i18n.language === 'en' ? 'हिंदी' : 'English'}
+                {i18n.language === 'en' ? 'English' : 'हिंदी'}
               </Text>
+              <Feather name="chevron-down" size={20} color={theme.colors.primary} style={styles.languageIcon} />
             </TouchableOpacity>
+
           </View>
         </View>
 
         <PredictCard onPress={handlePredict} />
         
-        <View style={styles.screen}>
+        {/* This container correctly clips its children into a single rounded shape */}
+        <View style={styles.compositeCardContainer}>
           {state.doctors.length > 0 && (
             <DoctorCard
               doctor={state.doctors[0]}
               onVideoCall={handleVideoCall}
             />
           )}
-
-          <View style={styles.scheduleWrapper}>
-            <View style={styles.scheduleSection}>
-              <Text style={styles.scheduleTitle}>{t('schedule')}</Text>
-              <ScheduleDots />
-            </View>
-          </View>
+          <ScheduleDots />
         </View>
 
         <ActionTiles
@@ -100,6 +96,25 @@ export function HomeScreen() {
           onMicrophone={() => console.log('Microphone pressed')}
         />
       </ScrollView>
+
+      <Modal
+        transparent={true}
+        visible={isLanguageModalVisible}
+        onRequestClose={() => setLanguageModalVisible(false)}
+        animationType="fade"
+      >
+        <TouchableOpacity style={styles.modalOverlay} onPress={() => setLanguageModalVisible(false)}>
+          <View style={styles.dropdownContainer}>
+            <TouchableOpacity style={styles.dropdownItem} onPress={() => handleLanguageSelect('en')}>
+              <Text style={styles.dropdownItemText}>English</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.dropdownItem} onPress={() => handleLanguageSelect('hi')}>
+              <Text style={styles.dropdownItemText}>हिंदी</Text>
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+      </Modal>
+
     </SafeAreaView>
   );
 }
@@ -115,6 +130,7 @@ const styles = StyleSheet.create({
   greetingSection: {
     paddingHorizontal: theme.spacing.md,
     paddingVertical: theme.spacing.sm,
+    marginBottom: theme.spacing.sm, // Added some space
   },
   greetingRow: {
     flexDirection: 'row',
@@ -122,54 +138,59 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   greeting: {
-    fontSize: theme.fontSize.lg, // Use a larger size for the whole block
+    fontSize: theme.fontSize.xxl, 
     color: theme.colors.text,
     flex: 1,
     marginRight: theme.spacing.md,
-    fontFamily: 'Helvetica-Bold', // This will now work after loading the font
-    lineHeight: 30, // Adjust line height for better spacing
+    fontFamily: 'Helvetica-Bold',
+    lineHeight: 30, 
   },
-  // --- NEW STYLE ADDED ---
   greetingHighlight: {
-    fontSize: theme.fontSize.xxxl, // Even larger size for the highlighted part
-    color: theme.colors.primary, // This applies the blue color
-    fontFamily: 'Helvetica-Bold', // Ensure it also uses the bold font
+    fontSize: theme.fontSize.xxxl, 
+    color: theme.colors.primary,
+    fontFamily: 'Helvetica-Bold',
   },
-  // -----------------------
   languageButton: {
-    backgroundColor: theme.colors.surface,
-    paddingHorizontal: theme.spacing.sm,
-    paddingVertical: theme.spacing.xs,
-    borderRadius: theme.borderRadius.sm,
-    ...theme.shadows.small,
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: theme.spacing.xs,
   },
   languageText: {
     color: theme.colors.primary,
-    fontSize: theme.fontSize.sm,
+    fontSize: theme.fontSize.lg,
     fontWeight: '600',
   },
-  // ... (rest of your styles remain the same)
-  screen: {
-    flex: 1,
-    backgroundColor: theme.colors.background,
-    paddingTop: theme.spacing.md,
+  languageIcon: {
+    marginLeft: theme.spacing.xxs,
   },
-  scheduleWrapper: {
+  compositeCardContainer: {
     marginHorizontal: theme.spacing.md,
-    marginTop: -56,
+    borderRadius: 30, // This creates the overall rounded shape
+    overflow: 'hidden', // This clips the children to the container's shape
+    // ...theme.shadows.medium,
+    marginBottom: theme.spacing.md,
+    marginTop: theme.spacing.md,
   },
-  scheduleSection: {
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-end',
+  },
+  dropdownContainer: {
+    marginTop: 100, 
+    marginRight: theme.spacing.md,
     backgroundColor: theme.colors.surface,
-    borderRadius: 20,
-    paddingTop: theme.spacing.md,
-    paddingBottom: theme.spacing.lg,
-    paddingHorizontal: theme.spacing.md,
-    ...theme.shadows.light,
+    borderRadius: theme.borderRadius.md,
+    padding: theme.spacing.xs,
+    ...theme.shadows.medium,
   },
-  scheduleTitle: {
-    color: theme.colors.text,
+  dropdownItem: {
+    paddingVertical: theme.spacing.sm,
+    paddingHorizontal: theme.spacing.lg,
+  },
+  dropdownItemText: {
     fontSize: theme.fontSize.md,
-    fontWeight: '600',
-    marginBottom: theme.spacing.xs,
+    color: theme.colors.text,
   },
 });
