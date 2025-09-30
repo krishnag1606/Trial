@@ -77,11 +77,13 @@ const styles = StyleSheet.create({
   },
   medicinesTile: {
     flex: 1,
+    fontFamily: 'Helvetica-Bold',
     backgroundColor: theme.colors.black,
     marginBottom: theme.spacing.sm, // Gap between medicines and book
   },
   bookTile: {
     flex: 1,
+    fontFamily: 'Helvetica-Bold',
     backgroundColor: '#9A9A9A', // A medium gray
   },
   largeTileText: {

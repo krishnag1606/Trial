@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { theme } from '../styles/theme';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useAppContext } from '../contexts/AppContext';
+import { theme } from '../styles/theme';
 
 export function PredictorsAccordion() {
   const { t, i18n } = useTranslation();
@@ -16,34 +16,49 @@ export function PredictorsAccordion() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{t('topPredictors')}</Text>
-      {state.predictors.map((predictor) => (
-        <View key={predictor.id} style={styles.item}>
-          <TouchableOpacity
-            style={styles.header}
-            onPress={() => toggleExpand(predictor.id)}
-          >
-            <Text style={styles.predictorName}>
-              {t(predictor.name.toLowerCase().replace(' ', ''))}
-            </Text>
-            <Ionicons
-              name={expandedId === predictor.id ? 'chevron-up' : 'chevron-down'}
-              size={20}
-              color={theme.colors.textSecondary}
-            />
-          </TouchableOpacity>
-          {expandedId === predictor.id && (
-            <View style={styles.content}>
-              <Text style={styles.accuracy}>
-                Accuracy: {predictor.accuracy}
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>{t('topPredictors').toUpperCase()}</Text>
+      </View>
+
+      {state.predictors.map((predictor) => {
+        const isExpanded = expandedId === predictor.id;
+
+        return (
+          <View key={predictor.id} style={styles.itemContainer}>
+            <TouchableOpacity
+              style={styles.header}
+              onPress={() => toggleExpand(predictor.id)}
+              activeOpacity={0.7}
+            >
+              {/* --- CORRECTION 1: Display name directly --- */}
+              {/* This correctly displays "HEART DISEASE" with a space */}
+              <Text style={styles.predictorName}>
+                {predictor.name.toUpperCase()}
               </Text>
-              <Text style={styles.description}>
-                {i18n.language === 'hi' ? predictor.hindiDescription : predictor.description}
-              </Text>
-            </View>
-          )}
-        </View>
-      ))}
+
+              {/* --- CORRECTION 2: Removed special logic for the last item's icon --- */}
+              <Ionicons
+                name={isExpanded ? 'chevron-up' : 'chevron-down'}
+                size={22}
+                color={theme.colors.textSecondary}
+              />
+            </TouchableOpacity>
+
+            {isExpanded && (
+              <View style={styles.content}>
+                <Text style={styles.accuracy}>
+                  Accuracy: {predictor.accuracy}
+                </Text>
+                <Text style={styles.description}>
+                  {i18n.language === 'hi'
+                    ? predictor.hindiDescription
+                    : predictor.description}
+                </Text>
+              </View>
+            )}
+          </View>
+        );
+      })}
     </View>
   );
 }
@@ -51,47 +66,53 @@ export function PredictorsAccordion() {
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: theme.spacing.md,
-    marginVertical: theme.spacing.sm,
+    marginVertical: theme.spacing.lg,
+  },
+  titleContainer: {
+    borderBottomWidth: 3, // Thicker line under the title
+    borderBottomColor: theme.colors.black,
+    paddingBottom: theme.spacing.sm,
+    marginBottom: theme.spacing.sm,
   },
   title: {
-    fontSize: theme.fontSize.lg,
-    fontWeight: 'bold',
+    fontSize: theme.fontSize.xxl,
+    fontFamily: 'Helvetica-Bold', // Use bold font
     color: theme.colors.text,
-    marginBottom: theme.spacing.md,
+    textTransform: 'uppercase', // Match the design
   },
-  item: {
-    backgroundColor: theme.colors.surface,
-    borderRadius: theme.borderRadius.md,
-    marginBottom: theme.spacing.sm,
-    ...theme.shadows.small,
+  // Replaces the old 'item' card style
+  itemContainer: {
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.border, // Light separator line
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: theme.spacing.md,
+    paddingVertical: theme.spacing.sm, // More vertical padding for a spacious feel
   },
   predictorName: {
-    fontSize: theme.fontSize.md,
-    fontWeight: '600',
+    fontSize: theme.fontSize.xl, // Larger font size
+    fontFamily: 'Helvetica', // Regular font weight
     color: theme.colors.text,
-    flex: 1,
+    textTransform: 'uppercase', // Match the design
   },
   content: {
-    paddingHorizontal: theme.spacing.md,
-    paddingBottom: theme.spacing.md,
-    borderTopWidth: 1,
-    borderTopColor: theme.colors.border,
+    // Removed the top border, padding is now used for separation
+    paddingBottom: theme.spacing.lg,
+    paddingHorizontal: theme.spacing.xs, // Slight indent for content
   },
   accuracy: {
-    fontSize: theme.fontSize.sm,
+    fontSize: theme.fontSize.md,
     color: theme.colors.primary,
     fontWeight: '600',
-    marginBottom: theme.spacing.xs,
+    marginBottom: theme.spacing.sm,
+    fontFamily: 'Helvetica-Bold',
   },
   description: {
-    fontSize: theme.fontSize.sm,
+    fontSize: theme.fontSize.md,
     color: theme.colors.textSecondary,
-    lineHeight: 20,
+    lineHeight: 22,
+    fontFamily: 'Helvetica',
   },
 });
