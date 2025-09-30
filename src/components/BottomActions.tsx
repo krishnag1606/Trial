@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
   wrapper: {
     marginHorizontal: theme.spacing.md,
     marginVertical: theme.spacing.md,
+    marginBottom: '30%', // --- ADDED: To ensure it stays at the bottom ---
   },
   // --- NEW: Style for the grey container ---
   card: {
