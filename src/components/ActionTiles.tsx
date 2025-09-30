@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { theme } from '../styles/theme';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+// Using Feather icons for the specific arrow in the design
+import { Feather } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
+import { theme } from '../styles/theme';
 
 interface ActionTilesProps {
   onCheckRecords: () => void;
@@ -15,20 +16,36 @@ export function ActionTiles({ onCheckRecords, onMedicines, onBook }: ActionTiles
 
   return (
     <View style={styles.container}>
-      <View style={styles.row}>
-        <TouchableOpacity style={[styles.tile, styles.recordsTile]} onPress={onCheckRecords}>
-          <Ionicons name="document-text-outline" size={24} color={theme.colors.primary} />
-          <Text style={styles.recordsText}>{t('checkRecords')}</Text>
+      {/* Left Column: Check Records Tile */}
+      <TouchableOpacity 
+        style={[styles.tile, styles.checkRecordsTile]} 
+        onPress={onCheckRecords}
+        activeOpacity={0.8}
+      >
+        <View style={styles.iconContainer}>
+          <Feather name="arrow-up-right" size={20} color={theme.colors.surface} />
+        </View>
+        <Text style={styles.largeTileText}>{t('checkRecords').toUpperCase()}</Text>
+      </TouchableOpacity>
+
+      {/* Right Column: Contains Medicines and Book tiles */}
+      <View style={styles.rightColumn}>
+        <TouchableOpacity 
+          style={[styles.tile, styles.medicinesTile]} 
+          onPress={onMedicines}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.mediumTileText}>{t('medicines').toUpperCase()}</Text>
         </TouchableOpacity>
-        
-        <TouchableOpacity style={[styles.tile, styles.medicinesTile]} onPress={onMedicines}>
-          <Text style={styles.medicinesText}>{t('medicines')}</Text>
+
+        <TouchableOpacity 
+          style={[styles.tile, styles.bookTile]} 
+          onPress={onBook}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.mediumTileText}>{t('book').toUpperCase()}</Text>
         </TouchableOpacity>
       </View>
-      
-      <TouchableOpacity style={[styles.tile, styles.bookTile]} onPress={onBook}>
-        <Text style={styles.bookText}>{t('book')}</Text>
-      </TouchableOpacity>
     </View>
   );
 }
@@ -36,47 +53,52 @@ export function ActionTiles({ onCheckRecords, onMedicines, onBook }: ActionTiles
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: theme.spacing.md,
-    marginVertical: theme.spacing.sm,
+    marginVertical: theme.spacing.lg, // Added more vertical margin
+    flexDirection: 'row', // Main axis is horizontal for the two columns
+    height: 200, // Fixed height for the entire component
   },
-  row: {
-    flexDirection: 'row',
-    marginBottom: theme.spacing.sm,
+  rightColumn: {
+    flex: 1,
+    marginLeft: theme.spacing.sm,
+    justifyContent: 'space-between', // Distribute space between medicines and book
   },
   tile: {
-    borderRadius: theme.borderRadius.lg,
-    ...theme.shadows.small,
-    alignItems: 'center',
+    borderRadius: 30, // Large, modern border radius
+    ...theme.shadows.medium, // A more pronounced shadow
     justifyContent: 'center',
+    alignItems: 'center',
   },
-  recordsTile: {
+  checkRecordsTile: {
     flex: 1,
-    backgroundColor: theme.colors.surface,
-    marginRight: theme.spacing.sm,
-    paddingVertical: theme.spacing.lg,
+    backgroundColor: '#52A9FF', // A vibrant blue
+    alignItems: 'flex-start', // Align text to the bottom-left
+    justifyContent: 'space-between', // Push icon and text to corners
+    padding: theme.spacing.lg,
   },
   medicinesTile: {
     flex: 1,
     backgroundColor: theme.colors.black,
-    paddingVertical: theme.spacing.lg,
+    marginBottom: theme.spacing.sm, // Gap between medicines and book
   },
   bookTile: {
-    backgroundColor: theme.colors.surface,
-    paddingVertical: theme.spacing.md,
+    flex: 1,
+    backgroundColor: '#9A9A9A', // A medium gray
   },
-  recordsText: {
-    color: theme.colors.primary,
-    fontSize: theme.fontSize.md,
-    fontWeight: '600',
-    marginTop: theme.spacing.xs,
-  },
-  medicinesText: {
+  largeTileText: {
     color: theme.colors.surface,
-    fontSize: theme.fontSize.md,
-    fontWeight: '600',
+    fontSize: theme.fontSize.xxxl,
+    fontFamily: 'Helvetica-Bold', // Use the bold font
+    lineHeight: 30, // Adjust line height for multiline text
   },
-  bookText: {
-    color: theme.colors.text,
-    fontSize: theme.fontSize.md,
-    fontWeight: '600',
+  mediumTileText: {
+    color: theme.colors.surface,
+    fontSize: theme.fontSize.lg,
+    fontFamily: 'Helvetica-Bold', // Use the bold font
+  },
+  iconContainer: {
+    backgroundColor: theme.colors.black,
+    padding: theme.spacing.sm,
+    borderRadius: 100, // Make it a perfect circle
+    alignSelf: 'flex-end', // Position it in the top-right of its parent
   },
 });

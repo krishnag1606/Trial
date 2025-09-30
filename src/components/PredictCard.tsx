@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     marginHorizontal: theme.spacing.md,
     marginVertical: theme.spacing.sm,
     borderRadius: theme.borderRadius.lg,
-    backgroundColor: theme.colors.gray500,
+    backgroundColor: theme.colors.new,
     overflow: 'hidden',
     ...theme.shadows.medium,
     height: 250, // Set a fixed height for the card
