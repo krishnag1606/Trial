@@ -1,15 +1,14 @@
-// src/screens/HomeScreen.tsx
-import { Feather } from '@expo/vector-icons';
+import { Feather, Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ActionTiles } from '../components/ActionTiles';
 import { BottomActions } from '../components/BottomActions';
 import { DoctorCard } from '../components/DoctorCard';
 import { Header } from '../components/Header';
-import { PredictCard } from '../components/PredictCard';
+import { PredictCard } from '../components/PredictCard'; // --- IMPORT ADDED BACK ---
 import { PredictorsAccordion } from '../components/PredictorsAccordion';
 import { ScheduleDots } from '../components/ScheduleDots';
 import { useAppContext } from '../contexts/AppContext';
@@ -19,7 +18,7 @@ export function HomeScreen() {
   const navigation = useNavigation();
   const { t, i18n } = useTranslation();
   const { state, dispatch } = useAppContext();
-  
+
   const [isLanguageModalVisible, setLanguageModalVisible] = useState(false);
 
   const handleLanguageSelect = (language: 'en' | 'hi') => {
@@ -45,13 +44,27 @@ export function HomeScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['bottom']}>
+    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
       <Header
         onNotificationsPress={() => navigation.navigate('Notifications')}
         onProfilePress={() => navigation.navigate('Profile')}
       />
       
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+      <View style={styles.helpInputContainer}>
+        <TextInput
+          style={styles.helpInput}
+          placeholder="How can I help?....."
+          placeholderTextColor={theme.colors.textSecondary}
+        />
+        <TouchableOpacity style={styles.micButton}>
+          <Ionicons name="mic" size={24} color={theme.colors.surface} />
+        </TouchableOpacity>
+      </View>
+
+      <ScrollView 
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.greetingSection}>
           <View style={styles.greetingRow}>
             <Text style={styles.greeting}>
@@ -59,20 +72,19 @@ export function HomeScreen() {
               {'\n'}
               {t('howAreYou')}
             </Text>
-            
+
             <TouchableOpacity style={styles.languageButton} onPress={() => setLanguageModalVisible(true)}>
               <Text style={styles.languageText}>
                 {i18n.language === 'en' ? 'English' : 'हिंदी'}
               </Text>
               <Feather name="chevron-down" size={20} color={theme.colors.primary} style={styles.languageIcon} />
             </TouchableOpacity>
-
           </View>
         </View>
 
+        {/* --- PREDICT CARD ADDED BACK --- */}
         <PredictCard onPress={handlePredict} />
-        
-        {/* This container correctly clips its children into a single rounded shape */}
+
         <View style={styles.compositeCardContainer}>
           {state.doctors.length > 0 && (
             <DoctorCard
@@ -90,10 +102,9 @@ export function HomeScreen() {
         />
 
         <PredictorsAccordion />
-
+        
         <BottomActions
           onPredict={handlePredict}
-          onMicrophone={() => console.log('Microphone pressed')}
         />
       </ScrollView>
 
@@ -129,8 +140,8 @@ const styles = StyleSheet.create({
   },
   greetingSection: {
     paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.sm,
-    marginBottom: theme.spacing.sm, // Added some space
+    paddingTop: theme.spacing.sm,
+    marginBottom: theme.spacing.sm,
   },
   greetingRow: {
     flexDirection: 'row',
@@ -138,15 +149,15 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   greeting: {
-    fontSize: theme.fontSize.xxl, 
+    fontSize: theme.fontSize.xxl,
     color: theme.colors.text,
     flex: 1,
     marginRight: theme.spacing.md,
     fontFamily: 'Helvetica-Bold',
-    lineHeight: 30, 
+    lineHeight: 30,
   },
   greetingHighlight: {
-    fontSize: theme.fontSize.xxxl, 
+    fontSize: theme.fontSize.xxxl,
     color: theme.colors.primary,
     fontFamily: 'Helvetica-Bold',
   },
@@ -163,13 +174,36 @@ const styles = StyleSheet.create({
   languageIcon: {
     marginLeft: theme.spacing.xxs,
   },
+  helpInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.borderRadius.lg,
+    marginHorizontal: theme.spacing.md,
+    marginVertical: theme.spacing.sm,
+    paddingLeft: theme.spacing.md,
+    ...theme.shadows.small,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+  },
+  helpInput: {
+    flex: 1,
+    paddingVertical: theme.spacing.md,
+    fontSize: theme.fontSize.md,
+    color: theme.colors.text,
+  },
+  micButton: {
+    padding: theme.spacing.sm,
+    backgroundColor: theme.colors.black,
+    borderRadius: theme.borderRadius.lg,
+    margin: theme.spacing.xs,
+  },
   compositeCardContainer: {
     marginHorizontal: theme.spacing.md,
-    borderRadius: 30, // This creates the overall rounded shape
-    overflow: 'hidden', // This clips the children to the container's shape
-    // ...theme.shadows.medium,
+    borderRadius: 30,
+    overflow: 'hidden',
     marginBottom: theme.spacing.md,
-    marginTop: theme.spacing.md,
+    marginTop: theme.spacing.sm,
   },
   modalOverlay: {
     flex: 1,
@@ -178,7 +212,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   dropdownContainer: {
-    marginTop: 100, 
+    marginTop: 100,
     marginRight: theme.spacing.md,
     backgroundColor: theme.colors.surface,
     borderRadius: theme.borderRadius.md,
@@ -194,3 +228,4 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
   },
 });
+
