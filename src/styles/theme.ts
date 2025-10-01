@@ -34,7 +34,8 @@ export const theme = {
     xl: scale(32),
     xxl: scale(48),
     xxxl: scale(64),
-    xxxxl: scale(80)
+    xxxxl: scale(80),
+    xxxxxl: scale(100)
   },
   borderRadius: {
     sm: moderateScale(4),

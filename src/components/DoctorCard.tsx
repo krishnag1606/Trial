@@ -39,7 +39,7 @@ export function DoctorCard({ doctor, onVideoCall }: DoctorCardProps) {
 
       {/* It sits on top of the gradient, independent of the text content flow */}
       <Image
-        source={require('../../assets/images/docimg-removebg-preview.png')}
+        source={require('../../assets/images/doctor.png')}
         style={styles.avatar}
       />
       
@@ -102,10 +102,10 @@ const styles = StyleSheet.create({
   avatar: {
     position: 'absolute',
     // --- THIS IS THE MODIFIED LINE ---
-    bottom: -20, // Changed from 0 to -20 to move it down
+    bottom: -40, // Changed from 0 to -40 to move it down
     right: -15,
-    width: 190,
-    height: 190,
+    width: 220,
+    height: 220,
     resizeMode: 'contain',
     backgroundColor: 'transparent',
   },

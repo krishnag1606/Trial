@@ -1,6 +1,14 @@
+// src/components/PredictCard.tsx
+import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  ImageBackground,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { theme } from '../styles/theme';
 
 interface PredictCardProps {
@@ -11,92 +19,96 @@ export function PredictCard({ onPress }: PredictCardProps) {
   const { t } = useTranslation();
 
   return (
-    <TouchableOpacity style={styles.card} onPress={onPress}>
-      <Image 
-        // Using the image from the new design
-        source={{ uri: 'https://www.aha.org/sites/default/files/2024-09/ths-musc-watchman-700x532.jpg' }}
-        style={styles.image}
-      />
-      {/* Semi-transparent overlay to ensure text is readable */}
-      <View style={styles.overlay} />
-      
-      {/* All text content is now absolutely positioned over the image */}
-      <View style={styles.content}>
-        <Text style={styles.title}>{t('predictYourDisease')}</Text>
-        <Text style={styles.accuracy}>UPTO 87% accuracy</Text>
-        <Text style={styles.description}>
-          Our ML models can predict most viral/index diseases like Malaria, Cardio Vascular disease etc.
-        </Text>
-      </View>
+    <TouchableOpacity style={styles.cardContainer} onPress={onPress}>
+      <ImageBackground
+        source={require('../../assets/images/doctor-patient.png')}
+        style={styles.imageBackground}
+        // MODIFICATION 1: Apply borderRadius directly to imageStyle
+        imageStyle={styles.imageStyle}
+      >
+        <LinearGradient
+          // MODIFICATION 2: Adjust gradient colors to achieve a dark blue to semi-transparent effect
+          colors={['rgba(0, 77, 153, 0.4)', 'rgba(0, 77, 153, 1)']} // Dark blue with more transparency at the top
+          start={{ x: 0, y: 0 }} // Start gradient from top-left
+          end={{ x: 0, y: 1 }} // End gradient at bottom-left (vertical gradient)
+          style={styles.gradientOverlay}
+        >
+          <View style={styles.content}>
+            <Text style={styles.title}>{t('predictYourDisease')}</Text>
+            <Text style={styles.accuracy}>UPTO 87% accuracy</Text>
+            <Text style={styles.description}>
+              Our ML models can predict most viral/index diseases like Malaria,
+              Cardio Vascular disease etc.
+            </Text>
+          </View>
 
-      {/* The pagination dots at the bottom */}
-      <View style={styles.dotsContainer}>
-        <View style={[styles.dot, styles.activeDot]} />
-        <View style={styles.dot} />
-        <View style={styles.dot} />
-      </View>
+          <View style={styles.dotsContainer}>
+            <View style={[styles.dot, styles.activeDot]} />
+            <View style={styles.dot} />
+            <View style={styles.dot} />
+          </View>
+        </LinearGradient>
+      </ImageBackground>
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
-  card: {
+  cardContainer: {
     marginHorizontal: theme.spacing.md,
     marginVertical: theme.spacing.sm,
     borderRadius: theme.borderRadius.lg,
-    backgroundColor: theme.colors.new,
-    overflow: 'hidden',
+    overflow: 'hidden', // Crucial: Ensures content inside respects the border radius
     ...theme.shadows.medium,
-    height: 250, // Set a fixed height for the card
+    height: 250,
+    backgroundColor: theme.colors.new, // Fallback background if image fails to load
   },
-  image: {
-    width: '50%',
+  imageBackground: {
+    width: '100%',
     height: '100%',
-    borderRadius: theme.borderRadius.lg,
-    position: 'absolute',
-    top: 0,
-    right: 0,
+    // MODIFICATION 3: Remove borderRadius from here if it was present,
+    // as it's handled by cardContainer's overflow and imageStyle
   },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0)', // A slight dark overlay for better contrast
+  imageStyle: {
+    resizeMode: 'cover',
+    // MODIFICATION 1 (Continued): Apply borderRadius here as well
+    borderRadius: theme.borderRadius.lg,
+  },
+  gradientOverlay: {
+    flex: 1,
+    justifyContent: 'space-between',
+    padding: theme.spacing.lg,
+    // MODIFICATION 4: Ensure gradient respects borderRadius
     borderRadius: theme.borderRadius.lg,
   },
   content: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    padding: theme.spacing.md,
-    justifyContent: 'center',
-    height: '100%',
-    width: '65%', // Limit the width of the text container
+    //
   },
   title: {
-    fontSize: theme.fontSize.xxxl, // Made title larger
-    color: theme.colors.primary, 
+    fontSize: theme.fontSize.xxxl,
+    color: theme.colors.surface,
     fontFamily: 'Helvetica-Bold',
     marginBottom: theme.spacing.sm,
   },
   accuracy: {
     fontSize: theme.fontSize.lg,
-    // Changed color to a dark text color for better readability on the image
-    color: theme.colors.text, 
+    color: theme.colors.surface,
     fontFamily: 'Helvetica-Bold',
     marginBottom: theme.spacing.xs,
+    opacity: 0.9,
   },
   description: {
     fontSize: theme.fontSize.sm,
-    color: theme.colors.black,
+    color: theme.colors.surface,
     lineHeight: 18,
     fontFamily: 'Helvetica',
+    opacity: 0.85,
   },
   dotsContainer: {
-    position: 'absolute',
-    bottom: theme.spacing.md,
-    left: 0,
-    right: 0,
     flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: theme.spacing.md,
   },
   dot: {
     width: 8,
@@ -106,7 +118,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
   },
   activeDot: {
-    backgroundColor: theme.colors.surface, // Active dot is solid white
+    backgroundColor: theme.colors.surface,
   },
 });
-
