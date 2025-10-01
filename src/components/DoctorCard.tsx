@@ -10,7 +10,6 @@ interface Doctor {
   id: string;
   name: string;
   specialty: string;
-  avatar: string;
 }
 
 interface DoctorCardProps {
@@ -28,55 +27,44 @@ export function DoctorCard({ doctor, onVideoCall }: DoctorCardProps) {
       end={[1, 1]}
       style={styles.card}
     >
+      {/* The text content is now the main element in the flow */}
       <View style={styles.content}>
-        <View style={styles.textBlock}>
-          <Text style={styles.name}>DR. GUPTA</Text>
-          <Text style={styles.specialty}>Family Diagnosis</Text>
-
-          <TouchableOpacity style={styles.videoCallButton} onPress={onVideoCall}>
-            <Ionicons name="videocam" size={20} color={theme.colors.surface} style={styles.videoIcon} />
-            <Text style={styles.videoCallText}>{t('videoCall')}</Text>
-          </TouchableOpacity>
-        </View>
-        
-        <Image
-          source={{ uri: doctor.avatar }}
-          style={styles.avatar}
-        />
-        
-        <TouchableOpacity style={styles.bookmarkButton}>
-          <Feather name="bookmark" size={24} color={theme.colors.surface} />
+        <Text style={styles.name}>DR. GUPTA</Text>
+        <Text style={styles.specialty}>Family Diagnosis</Text>
+        <TouchableOpacity style={styles.videoCallButton} onPress={onVideoCall}>
+          <Ionicons name="videocam" size={20} color={theme.colors.surface} style={styles.videoIcon} />
+          <Text style={styles.videoCallText}>{t('videoCall')}</Text>
         </TouchableOpacity>
       </View>
+
+      {/* It sits on top of the gradient, independent of the text content flow */}
+      <Image
+        source={require('../../assets/images/docimg-removebg-preview.png')}
+        style={styles.avatar}
+      />
+      
+      {/* The bookmark button was already absolute, which is fine */}
+      <TouchableOpacity style={styles.bookmarkButton}>
+        <Feather name="bookmark" size={24} color={theme.colors.surface} />
+      </TouchableOpacity>
     </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
-    // --- MODIFICATION START ---
-    // Round the top corners to match the parent container
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
-    // Flatten the bottom corners to connect seamlessly
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
-    // --- MODIFICATION END ---
-    height: 180,
+    height: 170,
     width: '100%',
-  },
-  content: {
-    minHeight: 160,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: theme.spacing.lg, // Added a bit more padding
-    paddingHorizontal: theme.spacing.md,
+    overflow: 'hidden',
     position: 'relative',
   },
-  textBlock: {
+  content: {
     flex: 1,
-    paddingRight: 140, // Space for the image
     justifyContent: 'center',
+    paddingLeft: theme.spacing.lg,
+    paddingRight: 140, // Space for the absolutely positioned image
   },
   name: {
     color: theme.colors.surface,
@@ -99,6 +87,8 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     flexDirection: 'row',
     alignItems: 'center',
+    left: -10,
+    top: -15,
   },
   videoIcon: {
     marginRight: theme.spacing.sm,
@@ -111,18 +101,19 @@ const styles = StyleSheet.create({
   },
   avatar: {
     position: 'absolute',
-    right: -38,
-    bottom: 0,
+    // --- THIS IS THE MODIFIED LINE ---
+    bottom: -20, // Changed from 0 to -20 to move it down
+    right: -15,
     width: 190,
-    height: '130%',
-    top: 0,
+    height: 190,
     resizeMode: 'contain',
-    borderRadius: 50,
+    backgroundColor: 'transparent',
   },
   bookmarkButton: {
     position: 'absolute',
     top: theme.spacing.md,
     right: theme.spacing.md,
     padding: theme.spacing.xs,
+    zIndex: 10,
   },
 });
