@@ -23,8 +23,7 @@ function TabBarIconWithBackground({ name, color, focused }) {
   return (
     <View style={styles.iconContainer}>
       <BlurView
-        tint="dark"
-        intensity={100}
+        intensity={0}
         style={StyleSheet.absoluteFill}
       />
       <Ionicons name={iconName} size={28} color={color} />
@@ -74,7 +73,7 @@ export function BottomTabNavigator() {
           bottom: Platform.OS === 'ios' ? 30 : 15,
           left: 20,
           right: 20,
-          backgroundColor: 'transparent',
+          backgroundColor: 'rgba(0, 0, 0, 0.82)',
           borderRadius: 35,
           height: 70,
           borderTopWidth: 0,
@@ -149,8 +148,10 @@ const styles = StyleSheet.create({
     height: 48,
     borderRadius: 24,
     justifyContent: 'center',
+    bottom: -10,
     alignItems: 'center',
-    overflow: 'hidden', // This is crucial to contain the BlurView
+    overflow: 'hidden',
+    backgroundColor: 'none',
   },
   predictButton: {
     top: -25,
@@ -173,7 +174,7 @@ const styles = StyleSheet.create({
     width: 57,
     height: 57,
     borderRadius: 28.5,
-    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    backgroundColor: 'transparent',
     justifyContent: 'center',
     alignItems: 'center',
   },
