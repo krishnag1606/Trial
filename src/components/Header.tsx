@@ -32,7 +32,7 @@ export function Header({
     <View style={styles.container}>
       {/* Left side: Back Button */}
       <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
-        <Feather name="chevron-left" size={24} color={theme.colors.text} />
+        <Feather name="chevron-left" size={40} color={theme.colors.text} />
       </TouchableOpacity>
 
       {/* Right side: Icon Group in a Pill Container */}
@@ -45,7 +45,7 @@ export function Header({
           onPress={onNotificationsPress}>
           <Feather
             name="bell"
-            size={22}
+            size={30}
             color={theme.colors.text}
           />
         </TouchableOpacity>
@@ -58,7 +58,7 @@ export function Header({
           onPress={onProfilePress}>
           <Feather
             name="user"
-            size={22}
+            size={30}
             color={theme.colors.text}
           />
         </TouchableOpacity>
