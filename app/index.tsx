@@ -1,7 +1,7 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -19,60 +19,63 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.greeting}>नमस्ते,</Text>
-        <Text style={styles.welcomeText}>Welcome Back!</Text>
-        <Text style={styles.subtitle}>Sign in to continue your healthcare journey</Text>
-      </View>
-
-      {/* Login Form */}
-      <View style={styles.formContainer}>
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Email</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter your email"
-            placeholderTextColor="#999"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
+      <StatusBar barStyle="dark-content" />
+      <View style={styles.content}>
+        {/* Header */}
+        <View style={styles.header}>
+          <Text style={styles.greeting}>नमस्ते,</Text>
+          <Text style={styles.welcomeText}>Welcome Back!</Text>
+          <Text style={styles.subtitle}>Sign in to continue your healthcare journey</Text>
         </View>
 
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Password</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter your password"
-            placeholderTextColor="#999"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
-        </View>
+        {/* Login Form */}
+        <View style={styles.formContainer}>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Email</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter your email"
+              placeholderTextColor="#999"
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
+          </View>
 
-        <TouchableOpacity style={styles.forgotPassword}>
-          <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-        </TouchableOpacity>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Password</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter your password"
+              placeholderTextColor="#999"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+            />
+          </View>
 
-        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-          <LinearGradient
-            colors={['#0EA5E9', '#0284C7']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={styles.gradientButton}
-          >
-            <Text style={styles.loginButtonText}>Sign In</Text>
-          </LinearGradient>
-        </TouchableOpacity>
-
-        <View style={styles.signupContainer}>
-          <Text style={styles.signupText}>Don't have an account? </Text>
-          <TouchableOpacity>
-            <Text style={styles.signupLink}>Sign Up</Text>
+          <TouchableOpacity style={styles.forgotPassword}>
+            <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+            <LinearGradient
+              colors={['#434343', '#000000']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.gradientButton}
+            >
+              <Text style={styles.loginButtonText}>Sign In</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+
+          <View style={styles.signupContainer}>
+            <Text style={styles.signupText}>Don't have an account? </Text>
+            <TouchableOpacity>
+              <Text style={styles.signupLink}>Sign Up</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </View>
@@ -83,20 +86,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F5F5F5',
+    justifyContent: 'center', // This will vertically center the content
+    paddingHorizontal: 24, // Added padding to the main container
+  },
+  content: {
+    // This new view will hold all the content
   },
   header: {
-    paddingTop: 60,
-    paddingHorizontal: 24,
-    paddingBottom: 40,
-    backgroundColor: '#fff',
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
+    marginBottom: 40,
+    alignItems: 'center', // Center header text
   },
   greeting: {
-    fontSize: 28,
+    fontSize: 55,
     color: '#0EA5E9',
     fontWeight: '600',
     marginBottom: 8,
+    fontFamily: 'Helvetica-Neue', // Example of a custom font
   },
   welcomeText: {
     fontSize: 32,
@@ -107,10 +112,10 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 16,
     color: '#64748B',
+    textAlign: 'center',
   },
   formContainer: {
-    paddingHorizontal: 24,
-    paddingTop: 32,
+    // Removed paddingHorizontal as it's now on the container
   },
   inputContainer: {
     marginBottom: 20,
@@ -142,6 +147,14 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     overflow: 'hidden',
     marginBottom: 24,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
   },
   gradientButton: {
     padding: 16,
@@ -165,20 +178,6 @@ const styles = StyleSheet.create({
   signupLink: {
     color: '#0EA5E9',
     fontSize: 14,
-    fontWeight: '600',
-  },
-  demoInfo: {
-    position: 'absolute',
-    bottom: 40,
-    alignSelf: 'center',
-    backgroundColor: '#FEF3C7',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderRadius: 12,
-  },
-  demoText: {
-    color: '#92400E',
-    fontSize: 12,
     fontWeight: '600',
   },
 });
