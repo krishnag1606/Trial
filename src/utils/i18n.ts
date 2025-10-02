@@ -4,7 +4,8 @@ import { initReactI18next } from 'react-i18next';
 const resources = {
   en: {
     translation: {
-      greeting: 'नमस्ते',
+      // Small Fix: Changed this from 'नमस्ते' to 'Hello'
+      greeting: 'Hello',
       howAreYou: 'How are you feeling today, Anmol?',
       predictYourDisease: 'Predict Your Disease',
       accuracy: 'UPTO 91% accuracy',
@@ -36,7 +37,9 @@ const resources = {
       videoCallWith: 'Video Call with',
       endCall: 'End Call',
       mute: 'Mute',
-      camera: 'Camera'
+      camera: 'Camera',
+      // --- ADDED THIS LINE ---
+      bottomActionsDescription: "In India, heart diseases mainly include diseases of the cardiovascular vessels, such as coronary heart disease (CHD), which is the main cause of heart attacks, and cerebrovascular disease (like stroke). Other related conditions include peripheral artery disease, rheumatic heart disease, and congenital heart disease."
     }
   },
   hi: {
@@ -73,7 +76,9 @@ const resources = {
       videoCallWith: 'वीडियो कॉल',
       endCall: 'कॉल समाप्त करें',
       mute: 'मूक',
-      camera: 'कैमरा'
+      camera: 'कैमरा',
+      // --- ADDED THIS LINE ---
+      bottomActionsDescription: "भारत में हृदय रोगों में मुख्य रूप से हृदय संबंधी रक्त वाहिकाओं की बीमारियाँ, जैसे कोरोनरी हृदय रोग (CVD) शामिल हैं, जो दिल के दौरे का मुख्य कारण है, और सेरेब्रोवास्कुलर रोग (जैसे स्ट्रोक). अन्य संबंधित स्थितियों में परिधीय धमनी रोग, आमवाती हृदय रोग और जन्मजात हृदय रोग शामिल हैं. इन बीमारियों के जोखिम कारकों में उच्च रक्तचाप, मोटापा, उच्च कोलेस्ट्रॉल, मधुमेह, धूम्रपान और अस्वास्थ्यकर आहार शामिल हैं।"
     }
   }
 };

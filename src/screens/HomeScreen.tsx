@@ -8,7 +8,7 @@ import { ActionTiles } from '../components/ActionTiles';
 import { BottomActions } from '../components/BottomActions';
 import { DoctorCard } from '../components/DoctorCard';
 import { Header } from '../components/Header';
-import { PredictCard } from '../components/PredictCard'; // --- IMPORT ADDED BACK ---
+import { PredictCard } from '../components/PredictCard';
 import { PredictorsAccordion } from '../components/PredictorsAccordion';
 import { ScheduleDots } from '../components/ScheduleDots';
 import { useAppContext } from '../contexts/AppContext';
@@ -50,10 +50,12 @@ export function HomeScreen() {
         onProfilePress={() => navigation.navigate('Profile')}
       />
       
+      {/* --- MODIFICATION 1: Updated container for the new design --- */}
       <View style={styles.helpInputContainer}>
         <TextInput
           style={styles.helpInput}
-          placeholder="How can I help?....."
+          // --- MODIFICATION 2: Adjusted placeholder text ---
+          placeholder="How can I help? ......" 
           placeholderTextColor={theme.colors.textSecondary}
         />
         <TouchableOpacity style={styles.micButton}>
@@ -82,7 +84,6 @@ export function HomeScreen() {
           </View>
         </View>
 
-        {/* --- PREDICT CARD ADDED BACK --- */}
         <PredictCard onPress={handlePredict} />
 
         <View style={styles.compositeCardContainer}>
@@ -130,11 +131,40 @@ export function HomeScreen() {
   );
 }
 
+// --- MODIFICATION 3: Updated styles for the input box ---
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,
   },
+  // --- New styles for input box ---
+  helpInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F0F0F0', // Light grey background from design
+    borderRadius: 30,           // Fully rounded corners for pill shape
+    marginHorizontal: theme.spacing.md,
+    marginVertical: theme.spacing.sm,
+    paddingLeft: theme.spacing.lg, // Space for the text
+    paddingRight: 8,              // Space for the button from the edge
+    paddingVertical: 6,           // Vertical space
+    borderWidth: 1.5,
+    borderColor: '#333333',       // Dark border from design
+  },
+  helpInput: {
+    flex: 1, // Takes up available space
+    fontSize: theme.fontSize.md,
+    color: theme.colors.text,
+  },
+  micButton: {
+    width: 44,
+    height: 44,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: theme.colors.black, // Black circle from design
+    borderRadius: 22,             // Make it a perfect circle
+  },
+  // --- Other styles remain the same ---
   scrollView: {
     flex: 1,
   },
@@ -174,30 +204,6 @@ const styles = StyleSheet.create({
   languageIcon: {
     marginLeft: theme.spacing.xxs,
   },
-  helpInputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: theme.colors.surface,
-    borderRadius: theme.borderRadius.lg,
-    marginHorizontal: theme.spacing.md,
-    marginVertical: theme.spacing.sm,
-    paddingLeft: theme.spacing.md,
-    ...theme.shadows.small,
-    borderWidth: 1,
-    borderColor: theme.colors.border,
-  },
-  helpInput: {
-    flex: 1,
-    paddingVertical: theme.spacing.md,
-    fontSize: theme.fontSize.md,
-    color: theme.colors.text,
-  },
-  micButton: {
-    padding: theme.spacing.sm,
-    backgroundColor: theme.colors.black,
-    borderRadius: theme.borderRadius.lg,
-    margin: theme.spacing.xs,
-  },
   compositeCardContainer: {
     marginHorizontal: theme.spacing.md,
     borderRadius: 30,
@@ -228,4 +234,3 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
   },
 });
-

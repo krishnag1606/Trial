@@ -11,14 +11,14 @@ interface BottomActionsProps {
 export function BottomActions({ onPredict }: BottomActionsProps) {
   const { t } = useTranslation();
   
-  // Text from the image
-  const descriptionText = "भारत में हृदय रोगों में मुख्य रूप से हृदय संबंधी रक्त वाहिकाओं की बीमारियाँ, जैसे कोरोनरी हृदय रोग (CVD) शामिल हैं, जो दिल के दौरे का मुख्य कारण है, और सेरेब्रोवास्कुलर रोग (जैसे स्ट्रोक). अन्य संबंधित स्थितियों में परिधीय धमनी रोग, आमवाती हृदय रोग और जन्मजात हृदय रोग शामिल हैं. इन बीमारियों के जोखिम कारकों में उच्च रक्तचाप, मोटापा, उच्च कोलेस्ट्रॉल, मधुमेह, धूम्रपान और अस्वास्थ्यकर आहार शामिल हैं।";
+  // --- MODIFICATION 1: The hardcoded text has been removed ---
+  // const descriptionText = "भारत में हृदय रोगों में..."; // This line is now deleted
 
   return (
     <View style={styles.wrapper}>
-      {/* --- ADDED: Grey container for the entire predict section --- */}
       <View style={styles.card}>
-        <Text style={styles.descriptionText}>{descriptionText}</Text>
+        {/* --- MODIFICATION 2: Using the t() function to get translated text --- */}
+        <Text style={styles.descriptionText}>{t('bottomActionsDescription')}</Text>
         
         <TouchableOpacity style={styles.predictButton} onPress={onPredict}>
           <Text style={styles.predictText}>{t('predict').toUpperCase()}</Text>
@@ -33,22 +33,24 @@ const styles = StyleSheet.create({
   wrapper: {
     marginHorizontal: theme.spacing.md,
     marginVertical: theme.spacing.md,
-    marginBottom: '30%', // --- ADDED: To ensure it stays at the bottom ---
+    // Note: You might want to remove marginBottom: '30%' if it causes layout issues.
+    // It's better to control spacing from the parent ScrollView contentContainerStyle.
   },
-  // --- NEW: Style for the grey container ---
   card: {
-    backgroundColor: '#cac6c6ff', // Light grey background
+    backgroundColor: '#aeacacff', // A slightly lighter grey
     borderRadius: 20,
-    padding: theme.spacing.md,
+    padding: theme.spacing.lg,
     alignItems: 'center',
+    ...theme.shadows.small,
+    marginBottom: theme.spacing.xxxl, // Increased space at the bottom
   },
-  // --- NEW: Style for the description text ---
   descriptionText: {
     color: theme.colors.black,
     fontSize: theme.fontSize.md,
     lineHeight: 24,
-    marginBottom: theme.spacing.lg,
-    fontFamily: 'Helvetica-Bold'
+    marginBottom: theme.spacing.xl, // Increased space
+    fontFamily: 'Helvetica-Bold',
+    textAlign: 'left',
   },
   predictButton: {
     backgroundColor: theme.colors.black,
@@ -59,13 +61,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     ...theme.shadows.medium,
-    width: '100%', // Button takes the full width inside the card
+    width: '100%',
   },
   predictText: {
     color: theme.colors.surface,
     fontSize: theme.fontSize.lg,
     fontWeight: 'bold',
     marginRight: theme.spacing.sm,
-    textTransform: 'uppercase', // Text is uppercase in the image
+    textTransform: 'uppercase',
   },
 });
